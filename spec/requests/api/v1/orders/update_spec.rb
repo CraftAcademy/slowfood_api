@@ -1,5 +1,6 @@
 RSpec.describe "PUT /api/v1/orders", type: :request do
   let(:pizza) { create(:product, name: 'Pizza', price: 50) }
+  let(:falafel) { create(:product, name: 'Falafel', price: 25) }
   let(:tacos) { create(:product, name: 'Tacos', price: 30) }
 
   let(:user) { create(:user) }
@@ -7,7 +8,8 @@ RSpec.describe "PUT /api/v1/orders", type: :request do
   let(:user_headers) { { HTTP_ACCEPT: 'application/json' }.merge!(credentials) }
 
   let(:order) { create(:order, user: user)}
-  let!(:order_item) { create(:order_item, product: pizza, order: order)}
+  let!(:order_item) { 3.times{ create(:order_item, product: pizza, order: order) } }
+  let!(:more_order_items) { 5.times{ create(:order_item, product: falafel, order: order) } }
 
   describe 'successfully' do
     before do
@@ -28,8 +30,12 @@ RSpec.describe "PUT /api/v1/orders", type: :request do
       expect(response_json["order"]["id"]).to eq order.id
     end
 
-    it "adds another product to the order" do
-      expect(order.order_items.count).to eq 2
+    it "responds with the right amount of products currently in the order" do
+      expect(response_json['order']['products'].count).to eq 3
+    end
+
+    it "responds with current order total" do
+      expect(response_json['order']['total']).to eq 305
     end
   end
 end
