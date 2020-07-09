@@ -1,4 +1,4 @@
-RSpec.describe "PUT /api/v1/orders", type: :request do
+RSpec.describe "PUT /api/v1/orders for new order item", type: :request do
   let(:pizza) { create(:product, name: 'Pizza', price: 50) }
   let(:falafel) { create(:product, name: 'Falafel', price: 25) }
   let(:tacos) { create(:product, name: 'Tacos', price: 30) }

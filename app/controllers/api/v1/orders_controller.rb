@@ -8,10 +8,15 @@ class Api::V1::OrdersController < ApplicationController
 
   def update
     order = current_user.orders.find(params[:id])
-    product = Product.find(params[:product_id])
-    order.order_items.create(product: product)
 
-    render json: create_json_response(order)
+    if params[:activity]
+      binding.pry
+    else 
+      product = Product.find(params[:product_id])
+      order.order_items.create(product: product)
+  
+      render json: create_json_response(order)
+    end    
   end
 
   private
