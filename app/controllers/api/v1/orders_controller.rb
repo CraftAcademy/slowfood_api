@@ -10,7 +10,8 @@ class Api::V1::OrdersController < ApplicationController
     order = current_user.orders.find(params[:id])
 
     if params[:activity]
-      binding.pry
+      order.update_attribute(:finalized, true)
+      render json: { message: "Your order will be ready in 30 minutes!" }
     else 
       product = Product.find(params[:product_id])
       order.order_items.create(product: product)
